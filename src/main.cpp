@@ -8,4 +8,6 @@ int main(){
     listInsert( &lst, 0, 2 );
     listInsert( &lst, 2, 3 );
     listDump( &lst );
+    listDelete( &lst, 1 );
+    listDump( &lst );
 }

@@ -37,5 +37,15 @@ int listCTOR( List* lst );
 */
 void listDTOR( List* lst );
 
-void listDump( List* lst );
+/*
+    \brief adds new element to List
+    Inserts new element right after [index] element. If there is no data in [index], then returns error code.
+    Updates tail if new element added right after previous tail.
+
+    \return -1 if [index] is not used in lst. Otherwise - returns index of inserted element
+*/
 int listInsert( List* lst, int index, int value );
+
+int listDelete( List* lst, int index );
+
+void listDump( List* lst );

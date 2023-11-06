@@ -7,20 +7,22 @@ int listInsert( List* lst, int index, int value ){
     if ( lst->prev[index] <= -1 ) return -1;
 
     /*
-        1   2   3       we have
-                        ----------
-        \       /       next(1): 3
-         \-----/        prev(3): 1
-          \---/         ----------
+        listInsert( &lst, 1, 2 )
 
-        1    2    3     we need
-                        ----------
-        \   /\   /      next(1): 2
-         \ /  \ /       prev(3): 2
+                       we have
+          1      3     ----------
+           \    /      next(1): 3
+            \  /       prev(3): 1
+             \/        ----------
+
+        1    2    3    we need
+                       ----------
+        \   /\   /     next(1): 2
+         \ /  \ /      prev(3): 2
           V    V
-                        next(2): 3
-                        prev(2): 1
-                        ----------
+                       next(2): 3
+                       prev(2): 1
+                       ----------
     */
 
     // position of new Node
@@ -49,8 +51,62 @@ int listInsert( List* lst, int index, int value ){
 }
 
 
+int listDelete( List* lst, int index ){
+
+    // if prev[index] is -1, then this index isn't used in List, so return error code
+    if ( lst->prev[index] == -1 ) return -1;
+
+    // we CAN NOT delete 0 index
+    if ( index == 0 )             return -1;
+
+    /*
+        listDelete( &lst, 2 )
+
+
+        1    2    3     we have
+                        ----------
+         \   /\   /     next(1): 2
+          \ /  \ /      next(2): 3
+           V    V
+                        prev(2): 1
+                        prev(3): 2
+                        ----------
+
+
+          1    3        we need
+          \    /        ----------
+           \  /         next(1): 3
+            \/          prev(3): 1
+                        ----------
+    */
+
+    int prev = lst->prev[index], \
+        next = lst->next[index];
+    // next(1): 3
+    lst->next[prev] = next;
+    // prev(3): 1
+    lst->prev[next] = prev;
+
+    elem toReturn = lst->data[index];
+
+    lst->data[index] = -1;
+    lst->prev[index] = -1;
+
+    lst->next[index] = lst->free;
+    lst->free = index;
+
+    if ( lst->prev[prev] == 0 ) lst->head = prev;
+    if ( lst->prev[next] == 0 ) lst->head = prev;
+
+    lst->size--;
+
+    return toReturn;
+}
+
+
 
 int listCTOR( List* lst ){
+
     lst->free = 1;
     lst->head = 0;
     lst->tail = 0;
@@ -106,9 +162,13 @@ void listDTOR( List* lst ){
 
 
 void listDump( List* lst ){
+
     printf("--LIST--\n");
     printf("head %d\ntail %d\nfree %d\n\n", lst->head, lst->tail, lst->free);
-    for ( int i = 0; i < lst->size + 1; i++ ){
+
+    for ( int i = 0; i < lst->capt; i++ ){
+        if ( lst->prev[i] == -1 )
+            continue;
         printf("--NODE #%d--\n", i);;
         printf("value %d\n", lst->data[i]);
         printf("next %d\n" , lst->next[i]);
@@ -116,15 +176,18 @@ void listDump( List* lst ){
         printf("\n");
     }
 
-    printf("\nnext");
+    printf("index\t");
+    for ( int i = 0; i < lst->capt; i++)
+        printf("%5d", i);
+    printf("\nnext\t");
 
     for ( int i = 0; i < lst->capt; i++ ){
         printf("%5d", lst->next[i]);
     }
 
-    printf("\nprev");
-
+    printf("\nprev\t");
     for ( int i = 0; i < lst->capt; i++ ){
         printf("%5d", lst->prev[i]);
     }
+    printf("\n--END OF LIST--\n\n");
 }
