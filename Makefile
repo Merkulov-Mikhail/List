@@ -1,17 +1,17 @@
 COMPILER=g++
 
 
-all: mkDir main.exe
+all: mkDirs main.exe
 	@echo "/--------\\"
 	@echo "|  DONE  |"
 	@echo "\\--------/"
 
-mkDir:
-ifeq (,$(wildcard ./$(BUILD_DIR)))
-	mkdir $(BUILD_DIR)
+mkDirs:
+ifeq (,$(wildcard ./build))
+	mkdir build
 endif
-ifeq (,$(wildcard ./$(SOURCES_DIR)))
-	mkdir $(SOURCES_DIR)
+ifeq (,$(wildcard ./src))
+	mkdir src
 endif
 
 

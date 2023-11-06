@@ -1,10 +1,11 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 
 typedef int elem;
 
 
-const int LIST_SIZE = 101;
+const int LIST_SIZE = 11;
 
 
 struct List{
@@ -12,6 +13,7 @@ struct List{
     int tail;
     int free;
     int size;
+    int capt; // capacity
 
     elem* data;
 
@@ -34,3 +36,6 @@ int listCTOR( List* lst );
     \param lst - pointer to List struct
 */
 void listDTOR( List* lst );
+
+void listDump( List* lst );
+int listInsert( List* lst, int index, int value );
