@@ -1,7 +1,7 @@
 #include "list.h"
 
 
-void listCTOR( List* lst ){
+int listCTOR( List* lst ){
     lst->free = 1;
     lst->head = 0;
     lst->tail = 0;
